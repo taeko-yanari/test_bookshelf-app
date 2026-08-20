@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('books', BookController::class)->middleware('auth')->except(['index', 'show']);
 Route::resource('books', BookController::class)->only(['index', 'show']);
+Route::resource('reviews', ReviewController::class)->middleware('auth')->only(['edit','update']);
 
 Route::middleware(['auth'])->group(function() {
   Route::post('/reviews/{book}', [ReviewController::class, 'store'])->name('reviews.store');
