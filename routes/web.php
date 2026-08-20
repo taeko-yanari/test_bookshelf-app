@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('books', BookController::class)->middleware('auth')->except(['index', 'show']);
 Route::resource('books', BookController::class)->only(['index', 'show']);
+
+Route::middleware(['auth'])->group(function() {
+  Route::post('/reviews/{book}', [ReviewController::class, 'store'])->name('reviews.store');
+});
