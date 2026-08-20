@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreGenreRequest;
+use App\Http\Requests\UpdateGenreRequest;
 
 class GenreController extends Controller
 {
@@ -40,6 +41,23 @@ class GenreController extends Controller
             return redirect()->route('genres.index')->with('success', 'ジャンルを登録しました');
         } catch (\Throwable $exception) {
             return redirect()->back()->withInput()->with('error', 'ジャンルの登録に失敗しました');
+        }
+    }
+
+    public function edit(Genre $genre)
+    {
+        return view('genres.edit', compact('genre'));
+    }
+
+    public function update(UpdateGenreRequest $request, Genre $genre)
+    {
+        try {
+            $validated = $request->validated();
+            $genre->update($validated);
+
+            return redirect()->route('genres.index')->with('success', 'ジャンルを更新しました');
+        } catch (\Throwable $exception) {
+            return redirect()->back()->withInput()->with('error', 'ジャンルの更新に失敗しました');
         }
     }
 }
