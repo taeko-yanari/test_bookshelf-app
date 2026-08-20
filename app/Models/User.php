@@ -69,3 +69,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Review::class, 'review_likes')->withTimestamps();
     }
+}
