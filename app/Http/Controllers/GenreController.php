@@ -60,4 +60,18 @@ class GenreController extends Controller
             return redirect()->back()->withInput()->with('error', 'ジャンルの更新に失敗しました');
         }
     }
+
+    public function destroy(Genre $genre)
+    {
+        if ($genre->books()->exists()) {
+            return redirect()->back()->with('error', '登録中の書籍があります。');
+        }
+
+        try {
+            $genre->delete();
+            return redirect()->route('genres.index')->with('success', 'ジャンルを削除しました');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'ジャンルの削除に失敗しました');
+        }
+    }
 }
