@@ -44,4 +44,17 @@ class ReviewController extends Controller
             return redirect()->back()->withInput()->with('error', 'レビューの更新に失敗しました');
         }
     }
+
+    public function destroy(Review $review)
+    {
+        $this->authorize('delete', $review);
+
+        try {
+            $review->delete();
+
+            return redirect()->route('books.show', $review->book->id)->with('success', 'レビューを削除しました');
+        } catch (\Throwable $exception) {
+            return redirect()->back()->with('error', 'レビューの削除に失敗しました');
+        }
+    }
 }
