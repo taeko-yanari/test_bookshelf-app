@@ -19,6 +19,8 @@ use App\Http\Controllers\GenreController;
 |
 */
 
+Route::get('/', [BookController::class, 'index'])->name('home');
+
 Route::resource('books', BookController::class)->middleware('auth')->except(['index', 'show']);
 Route::resource('books', BookController::class)->only(['index', 'show']);
 Route::resource('genres', GenreController::class)->middleware('auth');
