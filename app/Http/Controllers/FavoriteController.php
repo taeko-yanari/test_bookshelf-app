@@ -19,4 +19,30 @@ class FavoriteController extends Controller
 
         return view('favorites.index', compact('books'));
     }
+
+    public function toggle(Book $book)
+    {
+        $userId = Auth::id();
+            $favorite = Favorite::where('user_id', $userId)
+            ->where('book_id', $book->id)
+            ->first();
+
+        if ($favorite) {
+            try {
+                $favorite->delete();
+            } catch (\Throwable $exception) {
+                return redirect()->back()->with('error', 'お気に入りを解除できませんでした');
+            }
+        } else {
+            try {
+                Favorite::create([
+                    'user_id' => $userId,
+                    'book_id' => $book->id,
+                ]);
+            } catch (\Throwable $exception) {
+                return redirect()->back()->with('error', 'お気に入りに登録できませんでした');
+            }
+        }
+        return redirect()->route('books.show', $book->id);
+    }
 }
