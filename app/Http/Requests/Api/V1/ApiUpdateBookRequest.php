@@ -50,7 +50,7 @@ class ApiUpdateBookRequest extends FormRequest
             'published_date.required' => '出版日は入力必須です。',
             'published_date.date' => '有効な日付を選択してください。',
             'genres.required' => 'ジャンルは選択必須です。',
-            'genres.array' => 'ジャンルの型が違います',
+            'genres.array' => 'ジャンルの形式が正しくありません。',
             'genres.min' => 'ジャンルは選択必須です。',
             'genres.*.exists' => 'このジャンルは存在しません。',
             'genres.*.integer' => 'このジャンルは数字を入力してください。',
