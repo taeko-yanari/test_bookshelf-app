@@ -9,6 +9,7 @@ use App\Http\Resources\BookDetailResource;
 use App\Http\Resources\BookStoreResource;
 use App\Http\Requests\Api\V1\ApiIndexBookRequest;
 use App\Http\Requests\Api\V1\ApiStoreBookRequest;
+use App\Http\Requests\Api\V1\ApiUpdateBookRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -61,4 +62,19 @@ class BookController extends Controller
 
         return (new BookStoreResource($book))->response()->setStatusCode(201);
     }
+
+    public function update(ApiUpdateBookRequest $request, Book $book)
+    {
+        $validated = $request->validated();
+            $book = DB::transaction(function () use ($validated, $book) {
+                $book->update(collect($validated)->except('genres')->toArray());
+                $book->genres()->sync($validated['genres']);
+                return $book;
+            });
+
+        $book->load(['genres']);
+
+        return (new BookDetailResource($book))->response()->setStatusCode(200);
+    }
+
 }
