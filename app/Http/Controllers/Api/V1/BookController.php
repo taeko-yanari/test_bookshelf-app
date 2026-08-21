@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Http\Resources\BookResource;
+use App\Http\Resources\BookDetailResource;
 use App\Http\Requests\Api\V1\ApiIndexBookRequest;
 
 class BookController extends Controller
@@ -34,5 +35,12 @@ class BookController extends Controller
         ->paginate($request->input('per_page', 20));
 
         return BookResource::collection($books);
+    }
+
+    public function show(Book $book)
+    {
+        $book->load(['reviews.user', 'genres']);
+
+        return new BookDetailResource($book);
     }
 }

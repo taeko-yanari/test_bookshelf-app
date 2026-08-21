@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::name('api.')->prefix('v1')->group(function () {
-    Route::apiResource('books', BookController::class)->only(['index']);
+    Route::apiResource('books', BookController::class);
 });
 
