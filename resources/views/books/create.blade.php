@@ -7,11 +7,13 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+
             @if (session('error'))
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                     {{ session('error') }}
                 </div>
             @endif
+
             <!-- ISBN検索 -->
             <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
@@ -110,6 +112,14 @@
                 this.disabled = false;
                 labelEl.textContent = '検索';
             }
+        });
+
+        document.getElementById('isbn').addEventListener('input', function() {
+            this.value = this.value.replace(/-/g, '');
+        });
+
+        document.getElementById('isbn-search').addEventListener('input', function() {
+            this.value = this.value.replace(/-/g, '');
         });
     </script>
     @endpush
