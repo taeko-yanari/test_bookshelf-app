@@ -77,4 +77,9 @@ class BookController extends Controller
         return (new BookDetailResource($book))->response()->setStatusCode(200);
     }
 
+    public function destroy(Book $book)
+    {
+        $book->delete();
+        return response()->json(null, 204);
+    }
 }
