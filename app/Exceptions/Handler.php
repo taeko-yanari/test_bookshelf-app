@@ -18,6 +18,14 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    protected $levels = [
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class => 'info',
+        \Illuminate\Auth\Access\AuthorizationException::class => 'warning',
+        \Illuminate\Auth\AuthenticationException::class => 'info',
+        \Illuminate\Validation\ValidationException::class => 'info',
+        \Illuminate\Session\TokenMismatchException::class => 'warning',
+    ];
+
     /**
      * Register the exception handling callbacks for the application.
      */
@@ -26,5 +34,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
+        if ($request->is('api/*')) {
+            return response()->json([
+                'error' => '書籍が見つかりません。',
+            ], 404);
+        }
+    });
     }
 }
