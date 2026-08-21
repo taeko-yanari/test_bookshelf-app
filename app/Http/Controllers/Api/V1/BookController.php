@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Http\Resources\BookResource;
 use App\Http\Resources\BookDetailResource;
+use App\Http\Resources\BookStoreResource;
 use App\Http\Requests\Api\V1\ApiIndexBookRequest;
+use App\Http\Requests\Api\V1\ApiStoreBookRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -42,5 +46,19 @@ class BookController extends Controller
         $book->load(['reviews.user', 'genres']);
 
         return new BookDetailResource($book);
+    }
+
+    public function store(ApiStoreBookRequest $request)
+    {
+        $validated = $request->validated();
+        $book = DB::transaction(function () use ($validated) {
+            $book = Book::create(Arr::except($validated, ['genres']));
+            $book->genres()->sync($validated['genres']);
+            return $book;
+        });
+
+        $book->load(['genres']);
+
+        return (new BookStoreResource($book))->response()->setStatusCode(201);
     }
 }
