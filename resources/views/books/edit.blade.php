@@ -112,6 +112,14 @@
                 labelEl.textContent = '検索';
             }
         });
+
+        document.getElementById('isbn').addEventListener('input', function() {
+            this.value = this.value.replace(/-/g, '');
+        });
+
+        document.getElementById('isbn-search').addEventListener('input', function() {
+            this.value = this.value.replace(/-/g, '');
+        });
     </script>
     @endpush
 </x-app-layout>
