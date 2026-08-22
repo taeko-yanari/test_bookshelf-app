@@ -24,11 +24,11 @@
 
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 mb-2">評価 <span class="text-red-500">*</span></label>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2" id="star-rating">
                                 @for($i = 1; $i <= 5; $i++)
                                     <label class="cursor-pointer">
-                                        <input type="radio" name="rating" value="{{ $i }}" class="sr-only peer" {{ old('rating', $review->rating) == $i ? 'checked' : '' }} required>
-                                        <span class="text-2xl peer-checked:text-yellow-400 text-gray-300 hover:text-yellow-400">★</span>
+                                        <input type="radio" name="rating" value="{{ $i }}" class="sr-only star-input" {{ old('rating', $review->rating) == $i ? 'checked' : '' }} required>
+                                        <span class="text-2xl text-gray-300 hover:text-yellow-400 star-icon">★</span>
                                     </label>
                                 @endfor
                             </div>
@@ -56,4 +56,35 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        const starContainer = document.getElementById('star-rating');
+        const starInputs = starContainer.querySelectorAll('.star-input');
+        const starIcons = starContainer.querySelectorAll('.star-icon');
+
+        function updateStars(selectedValue) {
+            starInputs.forEach((input, index) => {
+                if (Number(input.value) <= selectedValue) {
+                    starIcons[index].classList.add('text-yellow-400');
+                    starIcons[index].classList.remove('text-gray-300');
+                } else {
+                    starIcons[index].classList.add('text-gray-300');
+                    starIcons[index].classList.remove('text-yellow-400');
+                }
+            });
+        }
+
+        starInputs.forEach((input) => {
+            input.addEventListener('change', () => {
+                updateStars(Number(input.value));
+            });
+        });
+
+        const checkedInput = starContainer.querySelector('.star-input:checked');
+        if (checkedInput) {
+            updateStars(Number(checkedInput.value));
+        }
+    </script>
+    @endpush
 </x-app-layout>
